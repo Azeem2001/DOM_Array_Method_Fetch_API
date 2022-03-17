@@ -1,18 +1,12 @@
 const main = document.getElementById('main');
 const addUserBtn = document.getElementById('add_user');
 const doubleBtn = document.getElementById('double');
-const showmillionairesBtn = document.getElementById('show-millionaires');
+const showmillionairesBtn = document.getElementById('show_millionaires');
 const sortbtn = document.getElementById('sort');
-const calculatewealthBtn = document.getElementById('calculate-wealth');
+const calculatewealthBtn = document.getElementById('calculate_wealth');
 
 let data = []
-getRandomUser();
-getRandomUser();
-getRandomUser();
-getRandomUser();
-getRandomUser();
-getRandomUser();
-getRandomUser();
+
 // Fetch random user and add money
 
 async function getRandomUser(){
@@ -25,12 +19,40 @@ const newUser = {
 }
 addData(newUser)
 }
+//Double eveyones money//
+function doubleMoney(){
+    data = data.map((user) =>{
+      return {...user,money:user.money * 2}
+    });
+updateDOM();
+}
+// Sort user by richest//
+function sortByRichest(){
+    data.sort((a,b)=> b.money - a.money);
+
+    updateDOM();
+}
+// Filter only millionaries//
+function showMillionaires(){
+   data = data.filter(user => user.money > 1000000);
+
+    updateDOM()
+}
+////reduce with calculate wealth//
+function calculateWealth(){
+   const wealth  = data.reduce((acc,user)=>( acc += user.money),0) 
+//    console.log(wealth)
+    const wealthEl =  document.createElement('div');
+    wealthEl.innerHTML = `<h3>Total Wealth: <strong>${formatMoney(wealth)}</strong></h3>`;  
+    main.appendChild(wealthEl)
+}
 
 //add new obj to data arr
 function addData(obj){
     data.push(obj);
     updateDOM()
 }
+
 //update DOM
 function updateDOM(providedData = data){
   //clear main div
@@ -52,3 +74,8 @@ return  '$ ' + number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
 
 // Event listeners//
 addUserBtn.addEventListener('click', getRandomUser);
+doubleBtn.addEventListener('click', doubleMoney);
+sortbtn.addEventListener('click', sortByRichest);
+showmillionairesBtn.addEventListener('click', showMillionaires);
+calculatewealthBtn.addEventListener('click', calculateWealth);
+
